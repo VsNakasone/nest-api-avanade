@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, ParseUUIDPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, ParseUUIDPipe, Patch, Post } from '@nestjs/common';
 import { CreateUserDTO } from './dto/createUser.dto';
 import { UpdateUsertDTO } from './dto/updateUser.dto';
 import { UsersService } from './users.service';
@@ -11,7 +11,7 @@ export class UsersController {
     //criar
     @Post()
     create(@Body() req:CreateUserDTO){
-        return this.usersService.create();
+        return this.usersService.create(req);
     }
     //listar todos
     @Get()
@@ -20,16 +20,20 @@ export class UsersController {
     }
     //listar um localhost:3000/users/1
     @Get(':id')
-    findOne(@Param('id', ParseUUIDPipe) id: number) {
+    findOne(@Param('id', ParseIntPipe) id: number) {
         return this.usersService.findOne(id);
     }
     //atualizar
     @Patch(':id')
     update(
-        @Param('id', ParseUUIDPipe) id: number,
+        @Param('id', ParseIntPipe) id: number,
         @Body() req: UpdateUsertDTO) {
             return this.usersService.update(id, req);
         }
     
     //deletar
+    @Delete('id')
+    remove(@Param('id', ParseIntPipe) id: number) {
+        return this.usersService.remove(id);
+    }
 }
